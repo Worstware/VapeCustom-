@@ -11378,7 +11378,200 @@ task.spawn(function()
 			notifyframereal:Remove()
 		end
 	end
+	
+local SmallWeapons = {["Enabled"] = false}
+SmallWeapons = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"].CreateOptionsButton({
+    ["Name"] = "Animations",
+       ["Function"] = function(Callback)
+            Enabled = Callback
+            if Enabled then
+                Connection = cam.Viewmodel.ChildAdded:Connect(function(v)
+                    if v:FindFirstChild("Handle") then
+                        pcall(function()
+                            v:FindFirstChild("Handle").Size = v:FindFirstChild("Handle").Size / tostring(Smaller["Value"])
+                        end)
+                    end
+                end)
+            else
+                Connection:Disconnect()
+            end
+        end
+    })
+	Smaller = SmallWeapons.CreateSlider({
+		["Name"] = "Value",
+		["Min"] = 0,
+		["Max"] = 10,
+		["Function"] = function(val) end,
+		["Default"] = 1
+	})
 
+local PrivateTexturePack1 = {["Enabled"] = false}
+PrivateTexturePack1 = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"].CreateOptionsButton({
+	Name = "PrivateTexturePack",
+	Function = function(callback) 
+		if callback then
+		 local obj = game:GetObjects("rbxassetid://11144793662")[1]
+				obj.Name = "Part"
+				obj.Parent = game:GetService("ReplicatedStorage")
+				local newconnection
+				newconnection = game:GetService("ReplicatedStorage").ChildAdded:Connect(function(v)
+					for i,x in pairs(obj:GetChildren()) do
+						x:Clone().Parent = v
+					end
+					newconnection:Disconnect()
+				end)
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/eLeCtRaDoMiNuS/milkwareclient/main/texture.lua"))()
+		end
+	end,
+	Default = false,
+	HoverText = "default ver."
+})
+
+local PrivateTexturePack2 = {["Enabled"] = false}
+PrivateTexturePack2 = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"].CreateOptionsButton({
+	Name = PrivateTexturePack
+	Function = function(callback) 
+		if callback then
+		 local obj = game:GetObjects("rbxassetid://11737658387")[1]
+				obj.Name = "Part"
+				obj.Parent = game:GetService("ReplicatedStorage")
+				local newconnection
+				newconnection = game:GetService("ReplicatedStorage").ChildAdded:Connect(function(v)
+					for i,x in pairs(obj:GetChildren()) do
+						x:Clone().Parent = v
+					end
+					newconnection:Disconnect()
+				end)
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/Worstware/texture/main/texture.lua"))()
+		end
+	end,
+	Default = false,
+	HoverText = "prism ver."
+})
+
+local SkyColor = {["Enabled"] = false}
+SkyColor = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"].CreateOptionsButton({
+	Name = "SkyColor",
+	Function = function(callback) 
+		if callback then
+		 game.Lighting.TimeOfDay = "00:00:00"
+		else
+			game.Lighting.TimeOfDay = "13:00:00"
+		end
+	end,
+	Default = false,
+	HoverText = "black sky"
+})
+
+
+local infjump = {["Enabled"] = false}
+infjump = GuiLibrary["ObjectsThatCanBeSaved"]["BlatantWindow"]["Api"].CreateOptionsButton({
+	["Name"] = "InfiniteJump",
+	["HoverText"] = "Jump without touching ground",
+	["Function"] = function(callback) 
+		if callback then    
+			infJumpConnection = uis.InputBegan:Connect(function(input)
+				if input.KeyCode == Enum.KeyCode.Space then
+					lplr.Character:WaitForChild("Humanoid"):ChangeState("Jumping")
+				end
+			end)
+		else
+			if infJumpConnection then
+				infJumpConnection:Disconnect()
+			end
+		end
+	end
+})
+
+runcode(function()
+	local nobobdepth = {["Value"] = 8}
+	local nobobhorizontal = {["Value"] = 8}
+	local nobobvertical = {["Value"] = 8}
+	local rotationx = {["Value"] = 0}
+	local rotationy = {["Value"] = 0}
+	local rotationz = {["Value"] = 0}
+	local oldc1
+	local bob = {["Enabled"] = false}
+	bob = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"].CreateOptionsButton({
+		["Name"] = "ViewModel",
+		["Function"] = function(callback) 
+			if callback then
+				lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_DEPTH_OFFSET", -(nobobdepth["Value"] / 10))
+				lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_HORIZONTAL_OFFSET", (nobobhorizontal["Value"] / 10))
+				lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_VERTICAL_OFFSET", (nobobvertical["Value"] / 10))
+				bedwars["ViewmodelController"]:playAnimation(11)
+			else
+				lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_DEPTH_OFFSET", 0)
+				lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_HORIZONTAL_OFFSET", 0)
+				lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_VERTICAL_OFFSET", 0)
+				bedwars["ViewmodelController"]:playAnimation(11)
+				cam.Viewmodel.RightHand.RightWrist.C1 = cam.Viewmodel.RightHand.RightWrist.C1
+			end
+		end,
+		["HoverText"] = "changes how you view items"
+	})
+	nobobdepth = bob.CreateSlider({
+		["Name"] = "Depth",
+		["Min"] = 0,
+		["Max"] = 25,
+		["Default"] = 8,
+		["Function"] = function(val)
+			if bob["Enabled"] then
+				lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_DEPTH_OFFSET", -(val / 10))
+			end
+		end
+	})
+	nobobhorizontal = bob.CreateSlider({
+		["Name"] = "Horizontal",
+		["Min"] = 0,
+		["Max"] = 25,
+		["Default"] = 8,
+		["Function"] = function(val)
+			if bob["Enabled"] then
+				lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_HORIZONTAL_OFFSET", (val / 10))
+			end
+		end
+	})
+	nobobvertical = bob.CreateSlider({
+		["Name"] = "Vertical",
+		["Min"] = 0,
+		["Max"] = 25,
+		["Default"] = 8,
+		["Function"] = function(val)
+			if bob["Enabled"] then
+				lplr.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"]:SetAttribute("ConstantManager_VERTICAL_OFFSET", (val / 10))
+			end
+		end
+	})
+end)
+
+local Messages = {"Pow!","Thump!","Wham!","Hit!","Smack!","Bang!","Pop!","Boom!","inf"}
+local theyessirYE = {["Enabled"] = false}
+    theyessirYE = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"].CreateOptionsButton({
+        ["Name"] = "DamageIndicator",
+        ["HoverText"] = "Meteor Moment.",
+            ["Function"] = function(callback)
+                if callback then
+                      old = debug.getupvalue(bedwars["DamageIndicator"],10,{Create})
+                debug.setupvalue(bedwars["DamageIndicator"],10,{
+                    Create = function(self,obj,...)
+                        spawn(function()
+                            pcall(function()
+                                obj.Parent.Text = Messages[math.random(1,#Messages)]
+                                obj.Parent.TextColor3 =  Color3.fromHSV(tick()%5/5,1,1)
+                            end)
+                        end)
+                        return game:GetService("TweenService"):Create(obj,...)
+                    end
+                })
+            else
+                debug.setupvalue(bedwars["DamageIndicator"],10,{
+                    Create = old
+                })
+                old = nil
+            end
+        end
+    })
 	local function rundata(datatab, olddatatab)
 		if not olddatatab then
 			if datatab.Disabled then 
